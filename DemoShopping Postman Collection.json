@@ -1,0 +1,1766 @@
+{
+	"info": {
+		"_postman_id": "2eb4c04d-e683-4d16-a21d-5c5b7a58d6ea",
+		"name": "DemoShopping",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36581595"
+	},
+	"item": [
+		{
+			"name": "Products",
+			"item": [
+				{
+					"name": "List of all products",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adding a new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response body contains the success message with the correct ID\", function () {\r",
+									"    var jsonData = pm.response.text();\r",
+									"    pm.expect(jsonData).to.include(\"Продукт успешно добавлен с ID:\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/add-product",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"add-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error when adding a new product",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that status code is 400\", function () {\r",
+									"    pm.response.to.have.status(400);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/add-product",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"add-product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Searching for a product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Correctness of the product_id value\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.product_id).to.eql(246);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/id/246",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"246"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product not found by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that status code name is Not Found\", function () {\r",
+									"    pm.response.to.have.status(\"Not Found\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/id/150000000000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"150000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting a product by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify the text of the response\", function () {\r",
+									"    var jsonData = pm.response.text();\r",
+									"    pm.expect(jsonData).to.include(\"Товар удалён\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/id/440",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"440"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deletion of product is denied",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code name is Forbidden\", function () {\r",
+									"    pm.response.to.have.status(\"Forbidden\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/id/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item not found for deletion",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that response time is less than 600ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(600);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/id/15000000000000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"15000000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Complete product update by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that PUT request is successful\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 201, 204]);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10 изменено\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/251",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incorrect product data when changing the product",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that Content-Type header is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10 изменено\",\r\n  \"price\": \"1500\",\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/251",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Modifiable product not found by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that ID is mentioned in response text\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"ID\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10 изменено\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/15000000000000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"15000000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Partial product update by ID",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that the response body is correct\", function () {\r",
+									"    pm.response.to.have.body(\"Товар частично обновлён\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/251",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incorrect data of the product to be modified",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that response contains an error message\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"Error\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": Xiaomi Pro 10,\r\n  \"description\": \"Описание для Xiaomi Pro 10\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/251",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"251"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Partially modifiable product not found by ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Verify that status code is 404\", function () {\r",
+									"    pm.response.to.have.status(404);\r",
+									"});\r",
+									"pm.test(\"The body of response confirms the value of the status code\", function () {\r",
+									"    pm.response.to.have.body(\"Товар с таким ID не найден\");\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"Xiaomi Pro 10\",\r\n  \"description\": \"Описание для Xiaomi Pro 10\",\r\n  \"price\": 1500,\r\n  \"category\": \"Laptops\",\r\n  \"manufacturer\": \"Xiaomi\",\r\n  \"imageUrl\": \"https://ltdfoto.ru/images/2024/09/13/Screenshot_3.png\",\r\n  \"freeShipping\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/products/id/15000000000000000",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"id",
+								"15000000000000000"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for products by category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/FindByCategory?category=Laptops",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"FindByCategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Laptops"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "No products found in the selected category",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/FindByCategory?category=Tablets",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"FindByCategory"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Tablets"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for products by manufacturer",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/FindByManufacturer?manufacturer=Samsung",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"FindByManufacturer"
+							],
+							"query": [
+								{
+									"key": "manufacturer",
+									"value": "Samsung"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "No products of the selected manufacturer found",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/FindByManufacturer?manufacturer=Nokia",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"FindByManufacturer"
+							],
+							"query": [
+								{
+									"key": "manufacturer",
+									"value": "Nokia"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search for items with free shipping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/FindByShipping?freeShipping=true",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"FindByShipping"
+							],
+							"query": [
+								{
+									"key": "freeShipping",
+									"value": "true"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Filtering the product list",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/filter?category=Laptops&manufacturer=Xiaomi&freeShipping=true&minPrice=977&maxPrice=1400",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Laptops"
+								},
+								{
+									"key": "manufacturer",
+									"value": "Xiaomi"
+								},
+								{
+									"key": "freeShipping",
+									"value": "true"
+								},
+								{
+									"key": "minPrice",
+									"value": "977"
+								},
+								{
+									"key": "maxPrice",
+									"value": "1400"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request error when filtering the product list (404 code is not returned)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/products/filter?category=Tablets&manufacturer=Nokia&freeShipping&minPrice&maxPrice",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"products",
+								"filter"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "Tablets"
+								},
+								{
+									"key": "manufacturer",
+									"value": "Nokia"
+								},
+								{
+									"key": "freeShipping",
+									"value": null
+								},
+								{
+									"key": "minPrice",
+									"value": null
+								},
+								{
+									"key": "maxPrice",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "User Authorization",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"{{login1}}\",\r\n  \"password\": \"{{password1}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid user data during authorization",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"wronglogin\",\r\n  \"password\": \"wrongpassword123456\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/login",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New user registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"newuser1\",\r\n  \"password\": \"new12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Incorrect user data during registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"Маша\",\r\n  \"password\": \"пароль\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/register",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Adding a new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"adduser2\",\r\n  \"password\": \"add12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid user data when adding a new user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"username\": \"Петя\",\r\n  \"password\": \"user12345\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Getting all user_id and login users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting a user by ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/370",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"370"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User to be deleted not found",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/users/358",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"users",
+								"358"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Adding a product to the user's cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": 5,\r\n  \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid request when adding a product to user's cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": abc,\r\n  \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to add a product to the cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": 5,\r\n  \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Server error when adding a product to cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"productId\": 0,\r\n  \"quantity\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Contents of the user's shopping cart",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/getCart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"getCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to receive cart information",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/getCart",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"getCart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updating the amount of product in the user's shopping cart",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/5589",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid request when updating product quantity in user's cart",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/5589",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to update the product quantity in the user's shopping cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/5589",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "The updated cart item was not found",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/cart/558",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"558"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting an item from the user's cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cart/5589",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid request when deleting an item from user's cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cart/a",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "The user is not authorized to delete an item from the cart",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cart/5589",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5589"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Item to be deleted not found in the cart",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/cart/5588",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"cart",
+								"5588"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Orders",
+			"item": [
+				{
+					"name": "List of all user orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user-orders",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to receive the list of orders",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/user-orders",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"user-orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Creating an order from products in the user's cart",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to create an order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deleting a product from an order",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders/1559/products/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1559",
+								"products",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to remove the product from the order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders/1560/products/5",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1560",
+								"products",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product or order to be deleted not found",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/orders/1561/products/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1561",
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Changing the number of products in an order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orders/1562/products/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1562",
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Invalid request to change the quantity of products in an order",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orders/1562/products/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1562",
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to change the number of products in the order",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orders/1562/products/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"1562",
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Product or order to be changed not found",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"quantity\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/orders/15/products/9",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"orders",
+								"15",
+								"products",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Updating the user's order total amount",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/update-orders-total",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-orders-total"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "User is not authorized to update order total amount",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/update-orders-total",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update-orders-total"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Data on paid orders",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/orders-history",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"orders-history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Authentication error when receiving data on paid orders",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/api/orders-history",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"api",
+								"orders-history"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment",
+			"item": [
+				{
+					"name": "Payment for user orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"card_type\": \"VISA\",\r\n  \"card_code\": \"8820354696467284\",\r\n  \"expiry_month\": 12,\r\n  \"expiry_year\": 26,\r\n  \"cvv\": \"123\",\r\n  \"email\": \"user@example.com\",\r\n  \"email_paypal\": \"user@example.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pay",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Error in card data when paying for user orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"card_type\": \"PayPal\",\r\n  \"card_code\": \"string\",\r\n  \"expiry_month\": 0,\r\n  \"expiry_year\": 0,\r\n  \"cvv\": \"string\",\r\n  \"email\": \"user@example.com\",\r\n  \"email_paypal\": \"invalid@@email.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/pay",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"pay"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://qa.demoshopping.ru"
+		},
+		{
+			"key": "login1",
+			"value": "qwe",
+			"type": "string"
+		},
+		{
+			"key": "password1",
+			"value": "qwe12345",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MzAsImlhdCI6MTcyNjIzMTg1NSwiZXhwIjoxNzM0ODcxODU1fQ.RdRNc1QGokkLKBoENB5Rgz58rHnGtMHj--xhOq_7FjU",
+			"type": "string"
+		}
+	]
+}
